@@ -1,16 +1,9 @@
 import MovieCard from "./MovieCard";
+import type { Movie } from "../types/movie";
 
-type Movie = {
-  id: string;
-};
-
-type Props = {
-  movies: Movie[];
-};
-
-export default function MoviesList({ movies }: Props) {
+export default function MoviesList({ movies }: { movies: Movie[] }) {
   return (
-    <div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {movies.map((movie) => (
         <MovieCard key={movie.id} movie={movie} />
       ))}
