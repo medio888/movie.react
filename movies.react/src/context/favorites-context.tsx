@@ -1,38 +1,36 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
+import type { ReactNode } from "react";
 
-const FavoritesContext = createContext(undefined);
+type FavoritesContextType = {
+  favorites: string[];
+  addToFavorites: (id: string) => void;
+  removeFromFavorites: (id: string) => void;
+  isFavorite: (id: string) => boolean;
+};
 
-export function FavoritesProvider({ children }: { children: React.ReactNode }) {
-  const [favorites, setFavorites] = useState(() => {
-    const saved = localStorage.getItem("favorites");
-    return saved ? JSON.parse(saved) : [];
-  });
+const FavoritesContext = createContext<FavoritesContextType | null>(null);
 
-  useEffect(() => {
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-  }, [favorites]);
+export function FavoritesProvider({ children }: { children: ReactNode }) {
+  const [favorites, setFavorites] = useState<string[]>([]);
 
   const addToFavorites = (id: string) => {
-    if (!favorites.includes(id)) {
-      setFavorites([...favorites, id]);
-    }
+    setFavorites((prev) => [...prev, id]);
   };
 
   const removeFromFavorites = (id: string) => {
-    setFavorites(favorites.filter((fav: string) => fav !== id));
+    setFavorites((prev) => prev.filter((movieId) => movieId !== id));
   };
 
   const isFavorite = (id: string) => {
     return favorites.includes(id);
   };
 
-  const value = {
+  const value: FavoritesContextType = {
+    favorites,
     addToFavorites,
     removeFromFavorites,
-    favorites,
     isFavorite,
   };
-  
 
   return (
     <FavoritesContext.Provider value={value}>
@@ -42,5 +40,11 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useFavorites() {
-  return useContext(FavoritesContext);
+  const context = useContext(FavoritesContext);
+
+  if (!context) {
+    throw new Error("useFavorites must be used within FavoritesProvider");
+  }
+
+  return context;
 }

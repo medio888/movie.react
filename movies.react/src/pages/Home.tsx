@@ -12,7 +12,7 @@ import MoviesList from '../components/MoviesList';
             });
         }, []);
 
-        const handleSearch = (query) => {
+        const handleSearch = (query: string) => {
             searchMovies(query).then(data => {
                 setMovies(data.titles);
             });

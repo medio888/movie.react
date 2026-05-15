@@ -5,7 +5,7 @@ import { getMoviesByIds } from "../services/api";
 
 export default function Favorites() {
     const { favorites } = useFavorites();
-    const [movies, setMovies] = useState([]);
+    const [movies, setMovies] = useState<any[]>([]);
 
     useEffect(() => {
         getMoviesByIds(favorites).then((data) => {

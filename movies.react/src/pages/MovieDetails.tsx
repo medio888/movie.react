@@ -5,7 +5,7 @@ import { getMovieById } from "../services/api";
 
 export default function MovieDetails() {
     const { id } = useParams();
-    const [movie, setMovie] = useState(null);
+    const [movie, setMovie] = useState<any>(null);
 
     useEffect(() => {
         if (id) {
